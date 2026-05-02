@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - AiDriver
+  - Competitor_lakeside
+  - Lap
+  - Bluecar
+  - Yellowcar
+  - Redcar
+  - Playercar
+  - RespawnTag
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - groundLayer
+  - Coin
+  - Waypoint
+  - AI_Waypoint
+  - Minimap
+  - RespawnPoint
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Skidmarks
+    uniqueID: 933372255
+    locked: 0
