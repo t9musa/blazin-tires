@@ -77,9 +77,9 @@ public class LakeGameManager : MonoBehaviour
     void Start()
     {
         //stops game end theme if the player has restarted the game
-        FindObjectOfType<AudioManager2>().Stop("GameEndTheme");
+        FindAnyObjectByType<AudioManager2>().Stop("GameEndTheme");
         //stop menu music
-        FindObjectOfType<AudioManager2>().Stop("MenuTheme");
+        FindAnyObjectByType<AudioManager2>().Stop("MenuTheme");
 
         //choose the right car with carindex
         UpdateCarIndex();
@@ -143,10 +143,10 @@ public class LakeGameManager : MonoBehaviour
     {
         finishGameTriggered = false;
         //stops game end theme if the player has restarted the game
-        FindObjectOfType<AudioManager2>().Stop("GameEndTheme");
+        FindAnyObjectByType<AudioManager2>().Stop("GameEndTheme");
 
         //start music
-        FindObjectOfType<AudioManager2>().Play("Lakeside_bgm");
+        FindAnyObjectByType<AudioManager2>().Play("Lakeside_bgm");
 
         countdown.GetComponent<LakeCountdown>().enabled = true;
 
@@ -310,8 +310,8 @@ public class LakeGameManager : MonoBehaviour
         if (finishGameTriggered == false)
         {
             restartGameScreen.SetActive(true);
-            FindObjectOfType<AudioManager2>().Stop("Lakeside_bgm");
-            FindObjectOfType<AudioManager2>().Play("GameEndTheme");
+            FindAnyObjectByType<AudioManager2>().Stop("Lakeside_bgm");
+            FindAnyObjectByType<AudioManager2>().Play("GameEndTheme");
             if (usersCars[carIndex].GetComponent<LapSystem>().CurrentLaps == 3)
             {
                 gameFinishText.text = "You won!!!";

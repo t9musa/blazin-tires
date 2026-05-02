@@ -1,81 +1,83 @@
-    using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Utility;
 
 public class CarAiHandler : MonoBehaviour
 {
-    public enum AIMode { followPlayer, followWaypoints };
+    public enum AIMode { followPlayer, followWaypoints }
     public AIMode aiMode;
 
-    //local variables
+    [SerializeField] WaypointCircuit circuit;
+    [SerializeField] float lookAheadDistance = 8f;
+
     Vector3 targetPosition = Vector3.zero;
     Transform targetTransform = null;
+    float progressDistance = 0f;
 
-    //components
     CarController2 carController;
 
-    //Awake is called when the script isntance is being loaded.
     private void Awake()
     {
-       carController = GetComponent<CarController2>();
+        carController = GetComponent<CarController2>();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    void Start() { }
 
     private void FixedUpdate()
     {
-        Vector2 inputVector = Vector2.zero;
-
-        switch(aiMode)
+        switch (aiMode)
         {
             case AIMode.followPlayer:
                 FollowPlayer();
                 break;
+            case AIMode.followWaypoints:
+                FollowWaypoints();
+                break;
         }
 
+        float steer = TurnTowardTarget();
+        // Reduce throttle proportionally when steering hard into a corner
+        float throttle = Mathf.Lerp(0.4f, 1.0f, 1f - Mathf.Abs(steer));
 
-        //inputVector.x = 1.0f;
-        inputVector.x = TurnTowardTarget();
-        inputVector.y = 1.0f;
-        //TurnTowardTarget();
-        //carController.GoForward();
-
-        //Send the input to the car controller
-        carController.SetInputVector(inputVector);
-
-
+        carController.SetInputVector(new Vector2(steer, throttle));
     }
 
     private void FollowPlayer()
     {
-        if(targetTransform == null)
-            targetTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        if (targetTransform == null)
+        {
+            var playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+                targetTransform = playerObj.transform;
+        }
 
         if (targetTransform != null)
             targetPosition = targetTransform.position;
-        
+    }
+
+    private void FollowWaypoints()
+    {
+        if (circuit == null) return;
+
+        var routePoint = circuit.GetRoutePoint(progressDistance);
+        Vector3 toPoint = routePoint.position - transform.position;
+
+        // Advance along the route once we've passed the current point
+        if (Vector3.Dot(routePoint.direction, toPoint) < 0)
+            progressDistance += 1f;
+
+        targetPosition = circuit.GetRoutePoint(progressDistance + lookAheadDistance).position;
     }
 
     float TurnTowardTarget()
     {
-        Vector2 VectorToTarget = targetPosition - transform.position;
-        VectorToTarget.Normalize();
+        Vector2 vectorToTarget = targetPosition - transform.position;
+        vectorToTarget.Normalize();
 
-        //calculate angle towards the target
-        float angleToTarget = Vector2.SignedAngle(transform.up, VectorToTarget);
-        angleToTarget *= -1;
-
-        //sample text
-        float steerAmount = angleToTarget / 45.0f;
-
-        //clamp steering to between -1 and 1
-        steerAmount = Math.Clamp(steerAmount, -1.0f, 1.0f);
-        Debug.Log(steerAmount);
+        float angleToTarget = Vector2.SignedAngle(transform.up, vectorToTarget) * -1f;
+        float steerAmount = Math.Clamp(angleToTarget / 45f, -1f, 1f);
         return steerAmount;
     }
 }

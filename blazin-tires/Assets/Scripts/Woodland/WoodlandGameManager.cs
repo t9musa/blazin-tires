@@ -72,7 +72,7 @@ public class WoodlandGameManager : MonoBehaviour
     void Start()
     {
         //stop menu music
-        FindObjectOfType<AudioManager2>().Stop("MenuTheme");
+        FindAnyObjectByType<AudioManager2>().Stop("MenuTheme");
 
         //choose the right car with carindex
         UpdateCarIndex();
@@ -135,9 +135,9 @@ public class WoodlandGameManager : MonoBehaviour
     public void StartGame()
     {
         //stops game end theme if the player has restarted the game
-        FindObjectOfType<AudioManager2>().Stop("GameEndTheme");
+        FindAnyObjectByType<AudioManager2>().Stop("GameEndTheme");
         //start music
-        FindObjectOfType<AudioManager2>().Play("WoodlandTheme");
+        FindAnyObjectByType<AudioManager2>().Play("WoodlandTheme");
         Debug.Log("Start game was run");
         //set waypoint collected amount to 0 and enable disabled waypoints
         collectedWaypoints = 0;
@@ -256,8 +256,8 @@ public class WoodlandGameManager : MonoBehaviour
     public void FinishedGame()
     {
         restartGameScreen.SetActive(true);
-        FindObjectOfType<AudioManager2>().Stop("WoodlandTheme");
-        FindObjectOfType<AudioManager2>().Play("GameEndTheme");
+        FindAnyObjectByType<AudioManager2>().Stop("WoodlandTheme");
+        FindAnyObjectByType<AudioManager2>().Play("GameEndTheme");
         if (usersCars[carIndex].GetComponent<WoodlandLapSystem>().timeCounter < carYellow.GetComponent<WoodlandLapSystem>().timeCounter)
         {
             gameFinishText.text = "You won!!!";

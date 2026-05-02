@@ -54,11 +54,8 @@ public class CarController2 : MonoBehaviour
     }
     public void SetInputVector(Vector2 inputVector)
     {
-       //Debug.Log("inputvector");
-       // Debug.Log(inputVector.x);
-       // Debug.Log(inputVector.y);
-      //  verticalInput = inputVector.x;
-     //   horizontalInput = inputVector.y;
+        horizontalInput = inputVector.x;
+        verticalInput = inputVector.y;
     }
 
     public void SetInputs(float forwardAmount, float turnAmount)
@@ -70,8 +67,8 @@ public class CarController2 : MonoBehaviour
     private void HandleMotor()
     {
         if (verticalInput == 0)
-            carRigidbody.drag = Mathf.Lerp(carRigidbody.drag, 0.8f, Time.fixedDeltaTime * 2);
-        else carRigidbody.drag = 0;
+            carRigidbody.linearDamping = Mathf.Lerp(carRigidbody.linearDamping, 0.8f, Time.fixedDeltaTime * 2);
+        else carRigidbody.linearDamping = 0;
         frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
         frontRightWheelCollider.motorTorque = verticalInput * motorForce;
         currentBreakForce = isBreaking ? breakForce : 0f;
@@ -116,11 +113,11 @@ public class CarController2 : MonoBehaviour
 
     public float GetVelocityMagnitude()
     {
-        return carRigidbody.velocity.magnitude;
+        return carRigidbody.linearVelocity.magnitude;
     }
 
     public double GetCarSpeed()
     {
-        return carRigidbody.velocity.magnitude * 3.6;
+        return carRigidbody.linearVelocity.magnitude * 3.6;
     }
 }

@@ -16,64 +16,59 @@ public class ArcadeCarController : MonoBehaviour
     public float turnSpeed;
     public LayerMask groundLayer;
 
+    [SerializeField] private float maxSpeed = 30f;
+    [SerializeField] private float steerSpeedThreshold = 15f;
+    [SerializeField] private float highSpeedSteerReduction = 0.4f;
+    [SerializeField] private float lateralDragStrength = 0.6f;
+
     public Rigidbody sphereRB;
 
     void Start()
     {
-        //detaches the rigidbody from the car
         sphereRB.transform.parent = null;
     }
 
-    //use update when not dealing with physics objects
     void Update()
     {
-        //get user input
-        moveInput = Input.GetAxisRaw("Vertical");
-        turnInput = Input.GetAxisRaw("Horizontal");
+        float rawVertical = Input.GetAxis("Vertical");
+        turnInput = Input.GetAxis("Horizontal");
 
-        //adjusts speed for the car
-        //when moveInput is >0: true => fwdSpeed; false => reverseSpeed
-        moveInput *= moveInput > 0 ? fwdSpeed : reverseSpeed;
+        moveInput = rawVertical * (rawVertical > 0 ? fwdSpeed : reverseSpeed);
 
-        //set cars position to sphere
         transform.position = sphereRB.transform.position;
 
-        //set cars rotation
-        float newRotation = turnInput * turnSpeed * Time.deltaTime * Input.GetAxisRaw("Vertical");
+        // Reduce steering authority at high speed for a more car-like feel
+        float speedFactor = Mathf.Clamp01(sphereRB.linearVelocity.magnitude / steerSpeedThreshold);
+        float steerMultiplier = Mathf.Lerp(1f, highSpeedSteerReduction, speedFactor);
+        float newRotation = turnInput * turnSpeed * Time.deltaTime * rawVertical * steerMultiplier;
         transform.Rotate(0, newRotation, 0, Space.World);
 
-        //raycast ground check
         RaycastHit hit;
         isCarGrounded = Physics.Raycast(transform.position, -transform.up, out hit, 1f, groundLayer);
 
-        //rotate car to be parallel to the ground (only when grounded — hit.normal is zero when raycast misses)
         if (isCarGrounded)
-        {
             transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
-        }
 
-        if(isCarGrounded)
-        {
-            sphereRB.drag = groundDrag;
-        } else
-        {
-            sphereRB.drag = airDrag;
-        }
-
+        sphereRB.linearDamping = isCarGrounded ? groundDrag : airDrag;
     }
 
     private void FixedUpdate()
     {
-        if(isCarGrounded)
+        if (isCarGrounded)
         {
-            //moves the car
             sphereRB.AddForce(transform.forward * moveInput, ForceMode.Acceleration);
-        } else
+
+            // Cancel lateral (sideways) velocity to resist sliding
+            Vector3 lateralVelocity = Vector3.Dot(sphereRB.linearVelocity, transform.right) * transform.right;
+            sphereRB.AddForce(-lateralVelocity * lateralDragStrength, ForceMode.VelocityChange);
+
+            // Enforce top speed
+            if (sphereRB.linearVelocity.magnitude > maxSpeed)
+                sphereRB.linearVelocity = sphereRB.linearVelocity.normalized * maxSpeed;
+        }
+        else
         {
-            //add extra gravity
             sphereRB.AddForce(transform.up * -30f);
         }
-
-       
     }
 }

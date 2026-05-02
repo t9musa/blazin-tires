@@ -60,11 +60,11 @@ public class DesertPauseMenu : MonoBehaviour
     {
         AudioListener.pause = false;
         //stops game end theme if the player has restarted the game
-        FindObjectOfType<AudioManager2>().Stop("GameEndTheme");
+        FindAnyObjectByType<AudioManager2>().Stop("GameEndTheme");
         //stop music
-        FindObjectOfType<AudioManager2>().Stop("DesertTheme");
+        FindAnyObjectByType<AudioManager2>().Stop("DesertTheme");
         //start menu music
-        FindObjectOfType<AudioManager2>().Play("MenuTheme");
+        FindAnyObjectByType<AudioManager2>().Play("MenuTheme");
 
         //TODO: Create a variable (don't hardcode this in)
         Time.timeScale = 1f;

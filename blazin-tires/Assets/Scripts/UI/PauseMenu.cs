@@ -61,11 +61,11 @@ public class PauseMenu : MonoBehaviour
     {
         AudioListener.pause = false;
         //stop menu music
-        FindObjectOfType<AudioManager2>().Stop("Lakeside_bgm");
+        FindAnyObjectByType<AudioManager2>().Stop("Lakeside_bgm");
         //stops end game theme if the player has restarted the game
-        FindObjectOfType<AudioManager2>().Stop("GameEndTheme");
+        FindAnyObjectByType<AudioManager2>().Stop("GameEndTheme");
         //start music
-        FindObjectOfType<AudioManager2>().Play("MenuTheme");
+        FindAnyObjectByType<AudioManager2>().Play("MenuTheme");
         //Debug.Log("Loading menu");
         Time.timeScale = 1f;
         pauseMenuUI.SetActive(false);
