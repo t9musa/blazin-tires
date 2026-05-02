@@ -23,7 +23,7 @@ public class DesertSpeedometer : MonoBehaviour
     {
         // 3.6f to convert in kilometers
         // ** The speed must be clamped by the car controller **
-        speed = usersCars[gameManager.carIndex].GetComponent<Rigidbody>().velocity.magnitude * 3.6f;
+        speed = usersCars[gameManager.carIndex].GetComponent<Rigidbody>().linearVelocity.magnitude * 3.6f;
 
         if (speedLabel != null)
             speedLabel.text = ((int)speed) + " km/h";
