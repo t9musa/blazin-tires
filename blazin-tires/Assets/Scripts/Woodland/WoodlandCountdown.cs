@@ -17,6 +17,18 @@ public class WoodlandCountdown : MonoBehaviour
     public GameObject lapTimer;
     //public PauseMenu pauseMenu;
 
+    void OnEnable()
+    {
+        // Freeze AI cars until GO
+        foreach (var car in aiCars)
+        {
+            var cc = car.GetComponent<UnityStandardAssets.Vehicles.Car.CarController>();
+            if (cc != null) cc.enabled = false;
+            var ai = car.GetComponent<UnityStandardAssets.Vehicles.Car.CarAIControl>();
+            if (ai != null) ai.enabled = false;
+        }
+    }
+
     void Start()
     {
         oneTwoThreeSound.Play();
@@ -56,7 +68,10 @@ public class WoodlandCountdown : MonoBehaviour
         }
         for (int i = 0; i < aiCars.Length; i++)
         {
-            aiCars[i].GetComponent<UnityStandardAssets.Vehicles.Car.CarController>().enabled = true;
+            var cc = aiCars[i].GetComponent<UnityStandardAssets.Vehicles.Car.CarController>();
+            if (cc != null) cc.enabled = true;
+            var ai = aiCars[i].GetComponent<UnityStandardAssets.Vehicles.Car.CarAIControl>();
+            if (ai != null) ai.enabled = true;
         }
         gameManager.isRunning = true;
         

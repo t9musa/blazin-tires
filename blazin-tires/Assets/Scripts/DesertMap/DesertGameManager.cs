@@ -266,10 +266,14 @@ public class DesertGameManager : MonoBehaviour
     }
     public void UpdateCurrentTime()
     {
-        currentTimeText.text = timePassed.ToString("F2");
+        int m  = (int)(timePassed / 60);
+        int s  = (int)(timePassed % 60);
+        int cs = (int)((timePassed % 1f) * 100);
+        currentTimeText.text = $"{m}:{s:00}.{cs:00}";
     }
     public void ResetGame()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

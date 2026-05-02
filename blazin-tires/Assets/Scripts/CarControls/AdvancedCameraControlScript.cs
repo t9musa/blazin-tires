@@ -16,7 +16,9 @@ public class AdvancedCameraControlScript : MonoBehaviour
     {
         //this kept producing errors ("tag not found"). I assigned it manually.
         //attachedVechicle = GameObject.FindGameObjectWithTag("NonArcadeCar");
-        cameraFolder = attachedVechicle.transform.Find("Camera").gameObject;
+        var cam = attachedVechicle != null ? attachedVechicle.transform.Find("Camera") : null;
+        if (cam == null) return;
+        cameraFolder = cam.gameObject;
         camLocation = cameraFolder.GetComponentsInChildren<Transform>();
     }
 

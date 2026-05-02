@@ -57,15 +57,8 @@ public class WoodlandCheckpoints : MonoBehaviour
         //float Car04Dist = Vector3.Distance(transform.position, Car04.position);
 
         #region Car01UI
-        if (Car01Dist == First)
-        {
-            Car01Text.text = "1/2";
-        }
-        if (Car01Dist == Second)
-        {
-            Car01Text.text = "2/2";
-        }
-    
+        if (Car01Dist == First)  Car01Text.text = "1ST";
+        if (Car01Dist == Second) Car01Text.text = "2ND";
         #endregion
 
         #region Car02UI

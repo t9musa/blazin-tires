@@ -17,10 +17,17 @@ public class CarAiHandler : MonoBehaviour
     float progressDistance = 0f;
 
     CarController2 carController;
+    Rigidbody rb;
+
+    float stuckTimer = 0f;
+    const float stuckSpeedThreshold = 0.5f;
+    const float stuckTimeLimit = 3f;
+    const float stuckAdvanceDistance = 8f;
 
     private void Awake()
     {
         carController = GetComponent<CarController2>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void Start() { }
@@ -42,6 +49,32 @@ public class CarAiHandler : MonoBehaviour
         float throttle = Mathf.Lerp(0.4f, 1.0f, 1f - Mathf.Abs(steer));
 
         carController.SetInputVector(new Vector2(steer, throttle));
+
+        CheckStuck();
+    }
+
+    void CheckStuck()
+    {
+        if (rb == null || circuit == null) return;
+
+        if (rb.linearVelocity.magnitude < stuckSpeedThreshold)
+        {
+            stuckTimer += Time.fixedDeltaTime;
+            if (stuckTimer >= stuckTimeLimit)
+            {
+                progressDistance += stuckAdvanceDistance;
+                var resetPoint = circuit.GetRoutePoint(progressDistance);
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                transform.position = resetPoint.position + Vector3.up * 0.5f;
+                transform.rotation = Quaternion.LookRotation(resetPoint.direction);
+                stuckTimer = 0f;
+            }
+        }
+        else
+        {
+            stuckTimer = 0f;
+        }
     }
 
     private void FollowPlayer()

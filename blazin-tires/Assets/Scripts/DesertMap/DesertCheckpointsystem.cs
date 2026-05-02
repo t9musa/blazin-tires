@@ -59,22 +59,10 @@ public class DesertCheckpointsystem : MonoBehaviour
         float Car04Dist = Vector3.Distance(transform.position, Car04.position);
 
         #region Car01UI
-        if (Car01Dist == First)
-        {
-            Car01Text.text = "1/4";
-        }
-        if (Car01Dist == Second)
-        {
-            Car01Text.text = "2/4";
-        }
-        if (Car01Dist == Third)
-        {
-            Car01Text.text = "3/4";
-        }
-        if (Car01Dist == Fourth)
-        {
-            Car01Text.text = "4/4";
-        }
+        if (Car01Dist == First)  Car01Text.text = "1ST";
+        if (Car01Dist == Second) Car01Text.text = "2ND";
+        if (Car01Dist == Third)  Car01Text.text = "3RD";
+        if (Car01Dist == Fourth) Car01Text.text = "4TH";
         #endregion
 
         #region Car02UI
