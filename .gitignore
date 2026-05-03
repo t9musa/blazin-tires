@@ -58,3 +58,18 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# Unity UserSettings - personal editor preferences (layouts, search history, etc.)
+[Uu]ser[Ss]ettings/
+
+# Unity AI developer plugin caches and configs
+[Uu]ser[Ss]ettings/AI*/
+[Uu]ser[Ss]ettings/AI-Game-Developer-Config.json
+
+# Claude Code local settings overrides (personal, not for sharing)
+.claude/settings.local.json
+
+# Stray root-level Unity folders (Unity project lives in blazin-tires/ subfolder)
+/Packages/
+/ProjectSettings/
+/UserSettings/
+
